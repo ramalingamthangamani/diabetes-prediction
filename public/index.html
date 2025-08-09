@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Diabetes Prediction</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+    <style>
+      body {
+        background: #11131a;
+        min-height: 100vh;
+        font-family: 'Montserrat', Arial, sans-serif;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .main-card {
+        background: #181a23;
+        border-radius: 18px;
+        box-shadow: 0 4px 32px 0 #000a;
+        padding: 2.5rem 2.5rem 2rem 2.5rem;
+        max-width: 480px;
+        width: 100%;
+        margin: 3rem auto;
+      }
+      .main-title {
+        font-family: 'Montserrat', Arial, sans-serif;
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 0.5rem;
+        text-align: center;
+      }
+      .main-desc {
+        color: #b0b3c2;
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+      .form-label {
+        color: #b0b3c2;
+        font-weight: 500;
+      }
+      .form-control {
+        background: #23263a;
+        color: #fff;
+        border: 1px solid #23263a;
+        border-radius: 8px;
+      }
+      .form-control:focus {
+        background: #23263a;
+        color: #fff;
+        border-color: #6c63ff;
+        box-shadow: 0 0 0 0.2rem #6c63ff33;
+      }
+      .btn-primary {
+        background: #6c63ff;
+        border: none;
+        font-weight: 600;
+        border-radius: 8px;
+      }
+      .btn-primary:hover {
+        background: #5548c8;
+      }
+      .btn-outline-secondary {
+        border-radius: 8px;
+        color: #b0b3c2;
+        border-color: #23263a;
+        background: #23263a;
+      }
+      .btn-outline-secondary:hover {
+        background: #23263a;
+        color: #fff;
+        border-color: #6c63ff;
+      }
+      .alert-danger {
+        background: #2d1a1a;
+        color: #ffb4b4;
+        border: none;
+      }
+      .alert-success {
+        background: #1a2d1a;
+        color: #b4ffb4;
+        border: none;
+      }
+      .model-accuracy {
+        color: #b0b3c2;
+        font-size: 0.95rem;
+        display: block;
+        margin-top: 1.5rem;
+        text-align: left;
+      }
+      @media (max-width: 600px) {
+        .main-card { padding: 1.2rem; }
+        .main-title { font-size: 1.3rem; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main-card">
+      <div style="text-align:center; font-size:2.5rem; margin-bottom:0.5rem;">
+        <span style="color:#6c63ff; vertical-align:middle;">🩺</span>
+      </div>
+      <div class="main-title">Diabetes Prediction</div>
+      <div class="main-desc">Enter your details below to predict diabetes risk.</div>
+      <form id="predictForm" onsubmit="return false;">
+        <div class="mb-3">
+          <label class="form-label">Pregnancies</label>
+          <div class="custom-input-wrapper">
+            <input id="Pregnancies" class="custom-input" type="number" min="0" value="1" />
+            <div class="custom-btns-inside">
+              <button type="button" class="custom-btn btn-minus" tabindex="-1" data-target="Pregnancies">−</button>
+              <button type="button" class="custom-btn btn-plus" tabindex="-1" data-target="Pregnancies">+</button>
+            </div>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Glucose Level</label>
+          <div class="custom-input-wrapper">
+            <input id="Glucose" class="custom-input" type="number" min="0" value="100" />
+            <div class="custom-btns-inside">
+              <button type="button" class="custom-btn btn-minus" tabindex="-1" data-target="Glucose">−</button>
+              <button type="button" class="custom-btn btn-plus" tabindex="-1" data-target="Glucose">+</button>
+            </div>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Blood Pressure</label>
+          <div class="custom-input-wrapper">
+            <input id="BloodPressure" class="custom-input" type="number" min="0" value="80" />
+            <div class="custom-btns-inside">
+              <button type="button" class="custom-btn btn-minus" tabindex="-1" data-target="BloodPressure">−</button>
+              <button type="button" class="custom-btn btn-plus" tabindex="-1" data-target="BloodPressure">+</button>
+            </div>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Insulin Level</label>
+          <div class="custom-input-wrapper">
+            <input id="Insulin" class="custom-input" type="number" min="0" value="80" />
+            <div class="custom-btns-inside">
+              <button type="button" class="custom-btn btn-minus" tabindex="-1" data-target="Insulin">−</button>
+              <button type="button" class="custom-btn btn-plus" tabindex="-1" data-target="Insulin">+</button>
+            </div>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">BMI</label>
+          <div class="custom-input-wrapper">
+            <input id="BMI" class="custom-input" type="number" min="0" step="0.1" value="25.0" />
+            <div class="custom-btns-inside">
+              <button type="button" class="custom-btn btn-minus" tabindex="-1" data-target="BMI">−</button>
+              <button type="button" class="custom-btn btn-plus" tabindex="-1" data-target="BMI">+</button>
+            </div>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Age</label>
+          <div class="custom-input-wrapper">
+            <input id="Age" class="custom-input" type="number" min="1" value="30" />
+            <div class="custom-btns-inside">
+              <button type="button" class="custom-btn btn-minus" tabindex="-1" data-target="Age">−</button>
+              <button type="button" class="custom-btn btn-plus" tabindex="-1" data-target="Age">+</button>
+            </div>
+          </div>
+        </div>
+        <div class="d-grid gap-2" style="margin-top:1.5rem;">
+          <button id="btnPredict" class="btn btn-primary" type="button">Predict</button>
+          <button id="btnReset" class="btn btn-outline-secondary" type="button">Reset</button>
+        </div>
+      </form>
+    <style>
+      /* Hide default number input arrows */
+      input[type=number]::-webkit-inner-spin-button, 
+      input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      input[type=number] {
+        -moz-appearance: textfield;
+        appearance: textfield;
+      }
+      .custom-input-wrapper {
+        position: relative;
+        background: #292a33;
+        border-radius: 16px;
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+        width: 100%;
+        min-height: 56px;
+        display: flex;
+        align-items: center;
+      }
+      .custom-input {
+        width: 100%;
+        background: transparent;
+        border: none;
+        color: #fff;
+        font-size: 1.5rem;
+        outline: none;
+        box-shadow: none;
+        padding: 0 4.5rem 0 1.2rem;
+        text-align: left;
+        font-family: inherit;
+        height: 56px;
+        box-sizing: border-box;
+      }
+      .custom-input:focus {
+        background: transparent;
+        border: none;
+        outline: none;
+        box-shadow: none;
+      }
+      .custom-btns-inside {
+        position: absolute;
+        right: 1.2rem;
+        top: 0;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        gap: 1.2rem;
+      }
+      .custom-btn {
+        background: transparent;
+        border: none;
+        color: #fff;
+        font-size: 1.2rem;
+        width: 2rem;
+        height: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        transition: background 0.15s;
+        cursor: pointer;
+      }
+      .custom-btn:active, .custom-btn:focus {
+        background: #23263a;
+        color: #fff;
+        outline: none;
+      }
+      .custom-btn:hover {
+        background: #23263a;
+        color: #fff;
+      }
+      @media (max-width: 600px) {
+        .custom-input {
+          font-size: 1.1rem;
+          padding-right: 3.5rem;
+        }
+        .custom-btns-inside {
+          right: 0.7rem;
+          gap: 0.7rem;
+        }
+        .custom-input-wrapper {
+          min-height: 44px;
+        }
+      }
+    </style>
+      <div id="result" class="mt-4"></div>
+      
+    </div>
+
+    <script>
+      // Coefficients and intercept exported from the trained scikit-learn model
+      const featureOrder = ["Pregnancies", "Glucose", "BloodPressure", "Insulin", "BMI", "Age"];
+      const coeffs = [0.06413503505253514, 0.033913880596918126, -0.013457557469652907, -0.001425105031824642, 0.10687712041756235, 0.03666042511693148];
+      const intercept = -8.808931855905325;
+
+      // Custom plus/minus button logic
+      document.querySelectorAll('.btn-plus').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const target = document.getElementById(this.getAttribute('data-target'));
+          let step = parseFloat(target.step) || 1;
+          let max = target.max ? parseFloat(target.max) : Infinity;
+          let value = parseFloat(target.value) || 0;
+          let newValue = value + step;
+          if (newValue > max) newValue = max;
+          target.value = newValue.toFixed(target.step && target.step < 1 ? 1 : 0);
+          target.dispatchEvent(new Event('input'));
+        });
+      });
+      document.querySelectorAll('.btn-minus').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const target = document.getElementById(this.getAttribute('data-target'));
+          let step = parseFloat(target.step) || 1;
+          let min = target.min ? parseFloat(target.min) : -Infinity;
+          let value = parseFloat(target.value) || 0;
+          let newValue = value - step;
+          if (newValue < min) newValue = min;
+          target.value = newValue.toFixed(target.step && target.step < 1 ? 1 : 0);
+          target.dispatchEvent(new Event('input'));
+        });
+      });
+
+      function predict(inputs) {
+        let z = intercept;
+        for (let i=0;i<coeffs.length;i++) {
+          z += coeffs[i] * Number(inputs[i]);
+        }
+        const prob = 1 / (1 + Math.exp(-z));
+        return prob;
+      }
+
+      document.getElementById('btnPredict').addEventListener('click', function() {
+        const inputs = featureOrder.map(f => document.getElementById(f).value || 0);
+        const prob = predict(inputs);
+        const pct = (prob*100).toFixed(2);
+        const risk = prob >= 0.5 ? '⚠️ High risk of diabetes. Please consult a doctor.' : '✅ Low risk of diabetes.';
+        const alertClass = prob >= 0.5 ? 'alert-danger' : 'alert-success';
+        document.getElementById('result').innerHTML = '<div class="alert ' + alertClass + '"><strong>' + risk + '</strong><br>Probability: <strong>' + pct + '%</strong></div>';
+      });
+
+      document.getElementById('btnReset').addEventListener('click', function() {
+        document.getElementById('predictForm').reset();
+        document.getElementById('result').innerHTML='';
+      });
+    </script>
+  </body>
+</html>
